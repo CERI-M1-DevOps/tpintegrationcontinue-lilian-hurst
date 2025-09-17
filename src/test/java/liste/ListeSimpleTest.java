@@ -378,4 +378,20 @@ public class ListeSimpleTest {
         listeATester.ajout(42);
         assertEquals("ListeSimple(Noeud(42))", listeATester.toString());
     }
+
+    @Test
+    public void echangerNoeudQuelconqueAvecTete() {
+        // Test spécifique pour la branche else if (r2 == tete)
+        listeATester.ajout(1);
+        listeATester.ajout(2);
+        listeATester.ajout(3);
+        listeATester.ajout(4);
+
+        Noeud r1 = listeATester.tete.getSuivant().getSuivant(); // Noeud(2) - pas la tête
+        Noeud r2 = listeATester.tete; // Noeud(4) - la tête
+
+        assertEquals("ListeSimple(Noeud(4), Noeud(3), Noeud(2), Noeud(1))", listeATester.toString());
+        listeATester.echanger(r1, r2);
+        assertEquals("ListeSimple(Noeud(2), Noeud(3), Noeud(4), Noeud(1))", listeATester.toString());
+    }
 }
