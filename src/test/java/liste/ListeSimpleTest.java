@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ListeSimpleTest {
+public class ListeSimpleTestComplete {
 
     ListeSimple listeATester;
 
@@ -393,5 +393,58 @@ public class ListeSimpleTest {
         assertEquals("ListeSimple(Noeud(4), Noeud(3), Noeud(2), Noeud(1))", listeATester.toString());
         listeATester.echanger(r1, r2);
         assertEquals("ListeSimple(Noeud(2), Noeud(3), Noeud(4), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void echangerTeteAvecDernierNoeud() {
+        // Autre test pour s'assurer que tous les cas sont couverts
+        listeATester.ajout(1); // dernier
+        listeATester.ajout(2);
+        listeATester.ajout(3); // tête
+
+        Noeud teteOriginale = listeATester.tete; // Noeud(3)
+        Noeud dernierNoeud = listeATester.tete.getSuivant().getSuivant(); // Noeud(1)
+
+        assertEquals("ListeSimple(Noeud(3), Noeud(2), Noeud(1))", listeATester.toString());
+        listeATester.echanger(dernierNoeud, teteOriginale); // r1=dernier, r2=tête
+        assertEquals("ListeSimple(Noeud(1), Noeud(2), Noeud(3))", listeATester.toString());
+    }
+
+    @Test
+    public void echangerDeuxNoeudsNonTete() {
+        // Test pour s'assurer que le cas r1 != tete && r2 != tete est bien testé
+        listeATester.ajout(1);
+        listeATester.ajout(2);
+        listeATester.ajout(3);
+        listeATester.ajout(4);
+        listeATester.ajout(5);
+
+        Noeud r1 = listeATester.tete.getSuivant(); // Noeud(4) - pas la tête
+        Noeud r2 = listeATester.tete.getSuivant().getSuivant().getSuivant(); // Noeud(2) - pas la tête
+
+        assertEquals("ListeSimple(Noeud(5), Noeud(4), Noeud(3), Noeud(2), Noeud(1))", listeATester.toString());
+        listeATester.echanger(r1, r2);
+        assertEquals("ListeSimple(Noeud(5), Noeud(2), Noeud(3), Noeud(4), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void supprimeTousRecursTestComplet() {
+        // Test pour s'assurer que toutes les branches de supprimeTousRecurs sont couvertes
+        // Cas où tous les éléments sont à supprimer sauf un au milieu
+        listeATester.ajout(1);
+        listeATester.ajout(2); // celui-ci ne sera pas supprimé
+        listeATester.ajout(1);
+        listeATester.ajout(1);
+        listeATester.supprimeTous(1);
+        assertEquals("ListeSimple(Noeud(2))", listeATester.toString());
+        assertEquals(1, listeATester.getSize());
+    }
+
+    @Test
+    public void supprimeTousRecursListeNullTest() {
+        // Test pour le cas de base de la récursion (tete == null)
+        listeATester.supprimeTous(1); // sur liste vide
+        assertNull(listeATester.tete);
+        assertEquals(0, listeATester.getSize());
     }
 }
