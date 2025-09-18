@@ -464,6 +464,85 @@ public class ListeSimpleTest {
     }
 
     @Test
+    public void echangerConditionR2EqualsTeteComplete() {
+        // Test pour couvrir complètement la condition else if (r2 == tete)
+        // Il faut que r1 != tete ET r2 == tete
+
+        listeATester.ajout(1); // sera en dernière position
+        listeATester.ajout(2); // sera au milieu
+        listeATester.ajout(3); // sera la tête
+
+        // État: ListeSimple(Noeud(3), Noeud(2), Noeud(1))
+
+        Noeud r1 = listeATester.tete.getSuivant(); // Noeud(2) - au milieu, PAS la tête
+        Noeud r2 = listeATester.tete;              // Noeud(3) - EST la tête
+
+        // Debug des conditions avant l'appel
+        assertNotSame(r1, r2);                    // r1 != r2 ✓
+        assertNotSame(r1, listeATester.tete);     // r1 != tete ✓
+        assertSame(r2, listeATester.tete);        // r2 == tete ✓
+
+        assertEquals(3, listeATester.tete.getElement());
+        assertEquals("ListeSimple(Noeud(3), Noeud(2), Noeud(1))", listeATester.toString());
+
+        // Cet appel doit déclencher else if (r2 == tete)
+        listeATester.echanger(r1, r2);
+
+        // Vérifications après échange:
+        // - tete = r1 doit avoir été exécuté, donc nouvelle tête = 2
+        assertEquals(2, listeATester.tete.getElement());
+        assertEquals("ListeSimple(Noeud(2), Noeud(3), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
+    public void echangerR2TeteAvecNoeudAuDebut() {
+        // Autre cas pour la même condition avec différentes positions
+        listeATester.ajout(100); // sera au fond
+        listeATester.ajout(200); // sera la tête
+
+        Noeud r1 = listeATester.tete.getSuivant(); // Noeud(100) - PAS la tête
+        Noeud r2 = listeATester.tete;              // Noeud(200) - EST la tête
+
+        // Conditions exactes pour else if (r2 == tete):
+        assertTrue(r1 != r2);                     // r1 != r2
+        assertTrue(r1 != listeATester.tete);      // r1 != tete
+        assertTrue(r2 == listeATester.tete);      // r2 == tete
+
+        assertEquals("ListeSimple(Noeud(200), Noeud(100))", listeATester.toString());
+
+        listeATester.echanger(r1, r2); // Doit entrer dans else if (r2 == tete)
+
+        assertEquals(100, listeATester.tete.getElement()); // tete = r1 exécutée
+        assertEquals("ListeSimple(Noeud(100), Noeud(200))", listeATester.toString());
+    }
+
+    @Test
+    public void echangerR2TeteAvecListeLongue() {
+        // Test avec une liste plus longue pour couvrir tous les cas
+        listeATester.ajout(10);
+        listeATester.ajout(20);
+        listeATester.ajout(30);
+        listeATester.ajout(40);
+        listeATester.ajout(50); // tête
+
+        // Prendre un nœud au milieu et la tête
+        Noeud r1 = listeATester.tete.getSuivant().getSuivant(); // Noeud(30) - milieu
+        Noeud r2 = listeATester.tete; // Noeud(50) - tête
+
+        // Vérifier les conditions
+        assertNotSame(r1, r2);
+        assertNotSame(r1, listeATester.tete);
+        assertSame(r2, listeATester.tete);
+
+        assertEquals("ListeSimple(Noeud(50), Noeud(40), Noeud(30), Noeud(20), Noeud(10))", listeATester.toString());
+
+        listeATester.echanger(r1, r2);
+
+        // La tête doit maintenant être r1 (30)
+        assertEquals(30, listeATester.tete.getElement());
+    }
+
+    @Test
     public void echangerNoeudNonTeteAvecTeteSimple() {
         // Test très simple pour couvrir else if (r2 == tete)
         listeATester.ajout(1);  // dernier
