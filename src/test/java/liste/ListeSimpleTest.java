@@ -428,27 +428,40 @@ public class ListeSimpleTest {
     }
 
     @Test
-    public void echangerCouvrirLigne104TeteEgalR1() {
-        // Test spécifique pour exécuter la ligne 104: tete = r1;
-        // Il faut que r2 == tete et r1 != tete
+    public void echangerPourCouvrirLigne104TeteEgalR1() {
+        // Test spécifiquement pour couvrir la ligne 104: tete = r1;
+        // Cette ligne n'est exécutée QUE dans la branche else if (r2 == tete)
 
-        listeATester.ajout(42); // sera le dernier élément
-        listeATester.ajout(99); // sera la tête
+        // Créer une liste simple avec exactement 2 éléments
+        listeATester.ajout(10); // devient le 2e élément
+        listeATester.ajout(20); // devient la tête
 
-        Noeud r1 = listeATester.tete.getSuivant(); // le dernier noeud (42) - PAS la tête
-        Noeud r2 = listeATester.tete;              // la tête (99) - EST la tête
+        // État: ListeSimple(Noeud(20), Noeud(10))
+        // tete pointe vers Noeud(20)
 
-        // État initial: tête pointe vers le noeud 99
-        assertEquals(99, listeATester.tete.getElement());
-        assertEquals("ListeSimple(Noeud(99), Noeud(42))", listeATester.toString());
+        Noeud noeudNonTete = listeATester.tete.getSuivant(); // Noeud(10) - PAS la tête
+        Noeud noeudTete = listeATester.tete;                 // Noeud(20) - EST la tête
 
-        // Cette ligne DOIT déclencher else if (r2 == tete) et exécuter tete = r1;
-        listeATester.echanger(r1, r2);
+        // Vérifications avant échange
+        assertNotNull(noeudNonTete);
+        assertNotNull(noeudTete);
+        assertEquals(20, listeATester.tete.getElement()); // tête = 20
+        assertTrue(noeudNonTete != listeATester.tete);   // r1 != tete
+        assertTrue(noeudTete == listeATester.tete);      // r2 == tete
 
-        // Après échange: tête doit pointer vers r1 (le noeud 42)
-        assertEquals(42, listeATester.tete.getElement()); // Vérification que "tete = r1;" a été exécutée
-        assertEquals("ListeSimple(Noeud(42), Noeud(99))", listeATester.toString());
-    }
+        // Cet appel DOIT déclencher: else if (r2 == tete)
+        // Conditions:
+        // - r1 != r2 ✓ (10 != 20)
+        // - r1 != tete && r2 != tete ✗ (car r2 == tete)
+        // - r1 == tete ✗ (car r1 != tete)
+        // - r2 == tete ✓ ← Cette branche sera prise
+        listeATester.echanger(noeudNonTete, noeudTete);
+
+        // Après l'échange, la ligne 104 "tete = r1;" doit avoir été exécutée
+        // Donc tete doit maintenant pointer vers noeudNonTete (qui contenait 10)
+        assertEquals(10, listeATester.tete.getElement()); // PREUVE que ligne 104 exécutée
+        assertEquals("ListeSimple(Noeud(10), Noeud(20))", listeATester.toString());
+    }:
 
     @Test
     public void echangerNoeudNonTeteAvecTeteSimple() {
