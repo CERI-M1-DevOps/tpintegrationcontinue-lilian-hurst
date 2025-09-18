@@ -461,7 +461,7 @@ public class ListeSimpleTest {
         // Donc tete doit maintenant pointer vers noeudNonTete (qui contenait 10)
         assertEquals(10, listeATester.tete.getElement()); // PREUVE que ligne 104 exécutée
         assertEquals("ListeSimple(Noeud(10), Noeud(20))", listeATester.toString());
-    }:
+    }
 
     @Test
     public void echangerNoeudNonTeteAvecTeteSimple() {
