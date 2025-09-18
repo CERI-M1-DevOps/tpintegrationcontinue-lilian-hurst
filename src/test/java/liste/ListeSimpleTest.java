@@ -428,23 +428,41 @@ public class ListeSimpleTest {
     }
 
     @Test
-    public void echangerNoeudNonTeteAvecTete() {
-        // Test spécifique pour couvrir la branche else if (r2 == tete)
-        // Il faut que r1 != tete ET r2 == tete
-        listeATester.ajout(1);  // sera en dernière position
-        listeATester.ajout(2);  // sera au milieu
-        listeATester.ajout(3);  // sera la tête
+    public void echangerNoeudNonTeteAvecTeteSimple() {
+        // Test très simple pour couvrir else if (r2 == tete)
+        listeATester.ajout(1);  // dernier
+        listeATester.ajout(2);  // tête
 
-        Noeud r1 = listeATester.tete.getSuivant(); // Noeud(2) - pas la tête
-        Noeud r2 = listeATester.tete;              // Noeud(3) - la tête
+        Noeud r1 = listeATester.tete.getSuivant(); // Noeud(1) - PAS la tête
+        Noeud r2 = listeATester.tete;              // Noeud(2) - EST la tête
 
-        assertEquals("ListeSimple(Noeud(3), Noeud(2), Noeud(1))", listeATester.toString());
+        // État initial: ListeSimple(Noeud(2), Noeud(1))
+        assertEquals("ListeSimple(Noeud(2), Noeud(1))", listeATester.toString());
 
-        // Ici on appelle echanger(r1, r2) où r1 n'est pas la tête mais r2 l'est
-        // Cela devrait déclencher la branche else if (r2 == tete)
+        // Appel avec r1 (non-tête) et r2 (tête)
+        // Ceci DOIT déclencher else if (r2 == tete)
         listeATester.echanger(r1, r2);
 
-        assertEquals("ListeSimple(Noeud(2), Noeud(3), Noeud(1))", listeATester.toString());
+        // Résultat attendu: ListeSimple(Noeud(1), Noeud(2))
+        assertEquals("ListeSimple(Noeud(1), Noeud(2))", listeATester.toString());
+    }
+
+    @Test
+    public void echangerAutreTestPourR2EgaleTete() {
+        // Autre test avec 3 éléments pour être sûr
+        listeATester.ajout(5);  // dernier
+        listeATester.ajout(10); // milieu
+        listeATester.ajout(15); // tête
+
+        Noeud dernierNoeud = listeATester.tete.getSuivant().getSuivant(); // Noeud(5)
+        Noeud teteNoeud = listeATester.tete; // Noeud(15)
+
+        assertEquals("ListeSimple(Noeud(15), Noeud(10), Noeud(5))", listeATester.toString());
+
+        // echanger(noeud_qui_n_est_pas_tete, noeud_qui_est_tete)
+        listeATester.echanger(dernierNoeud, teteNoeud);
+
+        assertEquals("ListeSimple(Noeud(5), Noeud(10), Noeud(15))", listeATester.toString());
     }
 
     @Test
