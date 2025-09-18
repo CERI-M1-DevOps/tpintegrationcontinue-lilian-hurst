@@ -428,6 +428,29 @@ public class ListeSimpleTest {
     }
 
     @Test
+    public void echangerCouvrirLigne104TeteEgalR1() {
+        // Test spécifique pour exécuter la ligne 104: tete = r1;
+        // Il faut que r2 == tete et r1 != tete
+
+        listeATester.ajout(42); // sera le dernier élément
+        listeATester.ajout(99); // sera la tête
+
+        Noeud r1 = listeATester.tete.getSuivant(); // le dernier noeud (42) - PAS la tête
+        Noeud r2 = listeATester.tete;              // la tête (99) - EST la tête
+
+        // État initial: tête pointe vers le noeud 99
+        assertEquals(99, listeATester.tete.getElement());
+        assertEquals("ListeSimple(Noeud(99), Noeud(42))", listeATester.toString());
+
+        // Cette ligne DOIT déclencher else if (r2 == tete) et exécuter tete = r1;
+        listeATester.echanger(r1, r2);
+
+        // Après échange: tête doit pointer vers r1 (le noeud 42)
+        assertEquals(42, listeATester.tete.getElement()); // Vérification que "tete = r1;" a été exécutée
+        assertEquals("ListeSimple(Noeud(42), Noeud(99))", listeATester.toString());
+    }
+
+    @Test
     public void echangerNoeudNonTeteAvecTeteSimple() {
         // Test très simple pour couvrir else if (r2 == tete)
         listeATester.ajout(1);  // dernier
