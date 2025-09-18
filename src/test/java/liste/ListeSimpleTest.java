@@ -428,6 +428,26 @@ public class ListeSimpleTest {
     }
 
     @Test
+    public void echangerNoeudNonTeteAvecTete() {
+        // Test spécifique pour couvrir la branche else if (r2 == tete)
+        // Il faut que r1 != tete ET r2 == tete
+        listeATester.ajout(1);  // sera en dernière position
+        listeATester.ajout(2);  // sera au milieu
+        listeATester.ajout(3);  // sera la tête
+
+        Noeud r1 = listeATester.tete.getSuivant(); // Noeud(2) - pas la tête
+        Noeud r2 = listeATester.tete;              // Noeud(3) - la tête
+
+        assertEquals("ListeSimple(Noeud(3), Noeud(2), Noeud(1))", listeATester.toString());
+
+        // Ici on appelle echanger(r1, r2) où r1 n'est pas la tête mais r2 l'est
+        // Cela devrait déclencher la branche else if (r2 == tete)
+        listeATester.echanger(r1, r2);
+
+        assertEquals("ListeSimple(Noeud(2), Noeud(3), Noeud(1))", listeATester.toString());
+    }
+
+    @Test
     public void supprimeTousRecursTestComplet() {
         // Test pour s'assurer que toutes les branches de supprimeTousRecurs sont couvertes
         // Cas où tous les éléments sont à supprimer sauf un au milieu
